@@ -35,7 +35,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
   String preacherValue = "";
   String messageTitle = "";
   String paymentOPtion = "";
-  String paymentAmount = "";
+  String paymentAmount = "0";
   String valueText = "";
   bool paid = true;
   int level = 0;
@@ -234,7 +234,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
     songpath = null;
     preacherValue = "";
     paymentOPtion = "";
-    paymentAmount = "";
+    paymentAmount = "0";
     pickedFile = null;
     datetime1 = DateFormat("yyyy-MM-dd").format(DateTime.now());
   }
@@ -308,7 +308,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                     if (paymentOPtion.isNotEmpty)
                       Text('Message Type:  ' + paymentOPtion,
                           style: const TextStyle(color: Colors.black)),
-                    if (paymentAmount.isNotEmpty)
+                    if (paymentAmount != "0")
                       Text('Amount:  ' + 'N' + paymentAmount,
                           style: const TextStyle(color: Colors.black)),
                   ],
@@ -337,16 +337,20 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                     const SizedBox(
                       width: 8,
                     ),
-                    ElevatedButton(
-                      // style: styleFrom(color: Colors.red),
-                      onPressed: () {
-                        resetValues();
-                        setState(() {});
-                      },
-                      child: const Text(
-                        'Clear',
-                      ),
-                    ),
+                    hideprogress
+                        ? ElevatedButton(
+                            // style: styleFrom(color: Colors.red),
+                            onPressed: () {
+                              resetValues();
+                              setState(() {});
+                            },
+                            child: const Text(
+                              'Clear',
+                            ),
+                          )
+                        : const SizedBox(
+                            width: 8,
+                          ),
                   ],
                 )
               : ElevatedButton(
@@ -654,10 +658,13 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .75,
-                        child: LinearProgressIndicator(
-                          value: progress,
-                          backgroundColor: Colors.red,
-                          color: Colors.green,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: LinearProgressIndicator(
+                            value: progress,
+                            backgroundColor: Colors.red,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
                       Center(

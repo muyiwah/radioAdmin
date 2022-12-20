@@ -55,7 +55,7 @@ class _UploadState extends State<Upload> {
   }
 
   @override
-  void dispose() {
+  void disposet() {
     // TODO: implement dispose
     super.dispose();
   }

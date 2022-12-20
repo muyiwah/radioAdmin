@@ -97,7 +97,7 @@ class _StatisticsState extends State<Statistics> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistics'),
+        title: const Text('Statistics'),
         centerTitle: true,
       ),
       backgroundColor: Colors.blue.shade100,
@@ -143,7 +143,7 @@ class _StatisticsState extends State<Statistics> with WidgetsBindingObserver {
                         document.data()! as Map<String, dynamic>;
                     print(data);
                     print(snapshot.data!);
-                    final emailLength = data['email'].length;
+                    final emailLength = data['email'].length - 1;
                     final total = int.parse(data['price']) * emailLength;
                     return Column(
                         // ignore: prefer_const_constructors

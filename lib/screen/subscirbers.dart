@@ -122,6 +122,7 @@ class _SubscribersState extends State<Subscribers> {
         deleteMail(mail);
         Get.back();
       },
+      confirmTextColor: Colors.white,
       content: Text(
         mail,
         overflow: TextOverflow.ellipsis,
@@ -135,24 +136,27 @@ class _SubscribersState extends State<Subscribers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(fromEdit[1].toString()),
+        title: const Text('Subscribers'),
         centerTitle: true,
       ),
       body: Column(
         children: [
-          Row(children: [
-            const Text(
-              'Message  ',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            ),
-            Flexible(
-              child: Text(
-                fromEdit[1].toString(),
-                // maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: [
+              const Text(
+                'Message  ',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
-            ),
-          ]),
+              Flexible(
+                child: Text(
+                  fromEdit[1].toString(),
+                  // maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ]),
+          ),
 
           Expanded(
             child: StreamBuilder<DocumentSnapshot>(
