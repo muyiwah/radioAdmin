@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "1003888243983",
+    "project_id": "notify-cc847",
+    "storage_bucket": "notify-cc847.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003888243983:android:1c6811ec386ac28cbffa7a",
+        "android_client_info": {
+          "package_name": "com.example.radio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcPZenUziZSIXnSSmj3oExej4DXb3lzW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003888243983:android:959dd113f2a11496bffa7a",
+        "android_client_info": {
+          "package_name": "com.example.radio_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcPZenUziZSIXnSSmj3oExej4DXb3lzW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003888243983:android:76fc0b536792b69dbffa7a",
+        "android_client_info": {
+          "package_name": "com.example.trccadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcPZenUziZSIXnSSmj3oExej4DXb3lzW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003888243983:android:a8bcd468bf301504bffa7a",
+        "android_client_info": {
+          "package_name": "com.example.trccradio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcPZenUziZSIXnSSmj3oExej4DXb3lzW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003888243983-rlip385rgv4u7spr1gpqns24opkf0g4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
