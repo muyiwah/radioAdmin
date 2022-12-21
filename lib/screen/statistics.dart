@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({
@@ -32,6 +33,8 @@ class _StatisticsState extends State<Statistics> with WidgetsBindingObserver {
     _init();
   }
 
+  final myStyle0 = const TextStyle(
+      color: Colors.grey, fontFamily: 'AkayaTelivigala', fontSize: 15);
   final myStyle = const TextStyle(
       color: Colors.black, fontFamily: 'AkayaTelivigala', fontSize: 15);
   final myStyle2 = const TextStyle(
@@ -101,171 +104,186 @@ class _StatisticsState extends State<Statistics> with WidgetsBindingObserver {
         centerTitle: true,
       ),
       backgroundColor: Colors.blue.shade100,
-      body: SafeArea(
-        child: Center(
-          // child: Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     Text(
-          //       '${online} Total listens',
-          //       style: const TextStyle(
-          //           color: Colors.white,
-          //           fontFamily: 'AkayaTelivigala',
-          //           fontSize: 20),
-          //     ),
-          //     SizedBox(
-          //       height: 20,
-          //     ),
-          //     Text(
-          //       '${onlineStatus.abs()} online',
-          //       style: const TextStyle(
-          //           color: Colors.white,
-          //           fontWeight: FontWeight.bold,
-          //           fontSize: 20),
-          //     ),
-          //   ],
-          // ),
-          child: StreamBuilder<QuerySnapshot>(
-              stream: _usersStream,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Error loading data');
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text("Loading");
-                }
-                print(snapshot.data!);
-                return Column(
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                    Map<String, dynamic> data =
-                        document.data()! as Map<String, dynamic>;
-                    print(data);
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              // child: Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Text(
+              //       '${online} Total listens',
+              //       style: const TextStyle(
+              //           color: Colors.white,
+              //           fontFamily: 'AkayaTelivigala',
+              //           fontSize: 20),
+              //     ),
+              //     SizedBox(
+              //       height: 20,
+              //     ),
+              //     Text(
+              //       '${onlineStatus.abs()} online',
+              //       style: const TextStyle(
+              //           color: Colors.white,
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 20),
+              //     ),
+              //   ],
+              // ),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: _usersStream,
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Error loading data');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
                     print(snapshot.data!);
-                    final emailLength = data['email'].length - 1;
-                    final total = int.parse(data['price']) * emailLength;
                     return Column(
-                        // ignore: prefer_const_constructors
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 30,
-                            color: Colors.white.withOpacity(.1),
-                            child: ListView(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                Text(
-                                  "Message:  " + data['song_name'].toString(),
-                                  style: myStyle1,
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data =
+                            document.data()! as Map<String, dynamic>;
+                        print(data);
+                        print(snapshot.data!);
+                        Timestamp t = data['timestamp'];
+                        DateTime d = t.toDate();
+                        String y = DateFormat("yyyy-MM-dd").format(d);
+                        y = "$y ";
+                        final emailLength = data['email'].length - 1;
+                        final total = int.parse(data['price']) * emailLength;
+                        return Column(
+                            // ignore: prefer_const_constructors
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                height: 30,
+                                color: Colors.white.withOpacity(.1),
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    Text(
+                                      y,
+                                      style: myStyle0,
+                                    ),
+                                    Text(
+                                      "Message:  " +
+                                          data['song_name'].toString(),
+                                      style: myStyle1,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Total listens: " +
+                                          data['listenCounter'].toString() +
+                                          " times",
+                                      style: myStyle2,
+                                    ),
+                                    // Text(data['email'].length().toString()),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text("Paid: " + data['paid'].toString()),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Subscribers: $emailLength',
+                                      style: myStyle3,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Message Price: " +
+                                          data['price'].toString(),
+                                      style: myStyle4,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Total sold:  N$total',
+                                      style: myStyle5,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Total listens: " +
-                                      data['listenCounter'].toString() +
-                                      " times",
-                                  style: myStyle2,
-                                ),
-                                // Text(data['email'].length().toString()),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Paid: " + data['paid'].toString()),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Subscribers: $emailLength',
-                                  style: myStyle3,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Message Price: " + data['price'].toString(),
-                                  style: myStyle4,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Total sold:  N$total',
-                                  style: myStyle5,
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Text(
-                          //   '${onlineStatus.abs()} Online on Radio',
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontWeight: FontWeight.bold,
-                          //       fontSize: 20),
-                          // ),
-                          // Text(
-                          //   '${online} Total listens on Radio',
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          // const SizedBox(
-                          //   height: 20,
-                          // ),
-                          // Text(
-                          //   "Total Messages:" + data['document'].length(),
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          // Text(
-                          //   "Total income:" + data['document'].length(),
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          // Text(
-                          //   "Total Message listens:" +
-                          //       data['document'].length(),
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          // Text(
-                          //   "Total Radio Listens:" + data['document'].length(),
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          // Text(
-                          //   "Total Messages:" + data['document'].length(),
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          // Text(
-                          //   "Total Messages:" + data['document'].length(),
-                          //   style: const TextStyle(
-                          //       color: Colors.white,
-                          //       fontFamily: 'AkayaTelivigala',
-                          //       fontSize: 20),
-                          // ),
-                          const Divider(
-                            height: 4,
-                          )
-                        ]);
-                  }).toList(),
-                );
-              }),
-        ),
+                              ),
+                              // Text(
+                              //   '${onlineStatus.abs()} Online on Radio',
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontWeight: FontWeight.bold,
+                              //       fontSize: 20),
+                              // ),
+                              // Text(
+                              //   '${online} Total listens on Radio',
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              // const SizedBox(
+                              //   height: 20,
+                              // ),
+                              // Text(
+                              //   "Total Messages:" + data['document'].length(),
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              // Text(
+                              //   "Total income:" + data['document'].length(),
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              // Text(
+                              //   "Total Message listens:" +
+                              //       data['document'].length(),
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              // Text(
+                              //   "Total Radio Listens:" + data['document'].length(),
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              // Text(
+                              //   "Total Messages:" + data['document'].length(),
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              // Text(
+                              //   "Total Messages:" + data['document'].length(),
+                              //   style: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'AkayaTelivigala',
+                              //       fontSize: 20),
+                              // ),
+                              const Divider(
+                                height: 4,
+                              )
+                            ]);
+                      }).toList(),
+                    );
+                  }),
+            ),
+          )
+         ],
       ),
     );
   }

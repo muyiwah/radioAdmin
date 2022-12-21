@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:trccadmin/screen/upload.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class Uploadfunctions extends StatefulWidget {
   const Uploadfunctions({super.key});
@@ -17,6 +18,62 @@ class Uploadfunctions extends StatefulWidget {
 }
 
 class _UploadfunctionsState extends State<Uploadfunctions> {
+  var subscription;
+  bool internetAvailable = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      print(result);
+      if (result == ConnectivityResult.wifi ||
+          result == ConnectivityResult.mobile) {
+        setState(() {
+          internetAvailable = true;
+        });
+      } else {
+        setState(() {
+          internetAvailable = false;
+        });
+      }
+      // Got a new connectivity status!
+    });
+    // print(subscription);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription.cancel();
+  }
+
+  // Future checkConnect(context) async {
+  //   _onTapButton(context, 'not ');
+  //   var connectivityResult = await (Connectivity().checkConnectivity());
+  //   if (connectivityResult == ConnectivityResult.mobile) {
+  //     setState(() {
+  //       internetAbailable = true;
+  //       stat = connectivityResult;
+  //     });
+  //     _onTapButton(context, 'not availabel');
+  //     // I am connected to a mobile network.
+  //     return internetAbailable;
+  //   } else if (connectivityResult == ConnectivityResult.wifi) {
+  //     stat = connectivityResult;
+  //     internetAbailable = true;
+  //     _onTapButton(context, 'availabel');
+  //     return internetAbailable;
+  //   } else {
+  //     internetAbailable = false;
+  //     return internetAbailable;
+  //   }
+  // }
+
   TextEditingController preach = TextEditingController();
   TextEditingController amount = TextEditingController();
 
@@ -44,7 +101,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
 //output: 2021-10-17 20:04:17.118089
 
   String datetime1 = DateFormat("yyyy-MM-dd").format(DateTime.now());
-
+  var stat;
   Future selectimage() async {
     final image = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -251,121 +308,139 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-              height: MediaQuery.of(context).size.height * .5,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fitHeight,
-                  image: AssetImage('lib/icon/radio6.jpg'),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              if (pickedFile != null)
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
                 Container(
-                  padding: EdgeInsets.only(left: 10),
-                  height: 100,
-                  width: 100,
-                  child: Expanded(
-                    child: Container(
-                      child: Image.file(
-                        File(pickedFile!.path!),
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height * .5,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fitHeight,
+                        image: AssetImage('lib/icon/radio6.jpg'),
                       ),
-                    ),
-                  ),
+                    )),
+                const SizedBox(
+                  height: 10,
                 ),
-              Padding(
-                //
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    if (waiting == true)
-                      const Center(child: CircularProgressIndicator()),
-                    if (songpath != null)
-                      Text(
-                        'Title: $songpath',
-                        style: const TextStyle(color: Colors.black),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                    if (pickedFile != null)
+                      Container(
+                        padding: EdgeInsets.only(left: 10),
+                        height: 100,
+                        width: 100,
+                        child: Container(
+                          child: Image.file(
+                            File(pickedFile!.path!),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    if (preacherValue.isNotEmpty)
-                      Text('Preacher:  ' + preacherValue,
-                          style: const TextStyle(color: Colors.black)),
-                    if (preacherValue.isNotEmpty)
-                      Text('Date:  ' + datetime1,
-                          style: const TextStyle(color: Colors.black)),
-                    if (paymentOPtion.isNotEmpty)
-                      Text('Message Type:  ' + paymentOPtion,
-                          style: const TextStyle(color: Colors.black)),
-                    if (paymentAmount != "0")
-                      Text('Amount:  ' + 'N' + paymentAmount,
-                          style: const TextStyle(color: Colors.black)),
+                    Padding(
+                      //
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (waiting == true)
+                            const Center(child: CircularProgressIndicator()),
+                          if (songpath != null)
+                            Text(
+                              'Title: $songpath',
+                              style: const TextStyle(color: Colors.black),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          if (preacherValue.isNotEmpty)
+                            Text('Preacher:  ' + preacherValue,
+                                style: const TextStyle(color: Colors.black)),
+                          if (preacherValue.isNotEmpty)
+                            Text('Date:  ' + datetime1,
+                                style: const TextStyle(color: Colors.black)),
+                          if (paymentOPtion.isNotEmpty)
+                            Text('Message Type:  ' + paymentOPtion,
+                                style: const TextStyle(color: Colors.black)),
+                          if (paymentAmount != "0")
+                            Text('Amount:  ' + 'N' + paymentAmount,
+                                style: const TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-          const Spacer(),
-          (songpath != null && preacherValue.isNotEmpty && pickedFile != null)
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    hideprogress
-                        ? ElevatedButton(
-                            onPressed: () {
-                              textData = false;
-                              hideprogress = false;
+                // const Spacer(),
+                (songpath != null &&
+                        preacherValue.isNotEmpty &&
+                        pickedFile != null)
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          hideprogress
+                              ? ElevatedButton(
+                                  onPressed: () {
+                                    if (internetAvailable) {
+                                      textData = false;
+                                      hideprogress = false;
 
-                              uploadFiles(context);
-                            },
-                            child: const Text(
-                              'upload to database',
-                            ),
-                          )
-                        : const CircularProgressIndicator(),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    hideprogress
-                        ? ElevatedButton(
-                            // style: styleFrom(color: Colors.red),
-                            onPressed: () {
-                              resetValues();
-                              setState(() {});
-                            },
-                            child: const Text(
-                              'Clear',
-                            ),
-                          )
-                        : const SizedBox(
+                                      uploadFiles(context);
+                                    } else {
+                                      Get.snackbar(
+                                        'Alert',
+                                        'seems as if you are not connected to the internet, check your internet connection and try again',
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        forwardAnimationCurve:
+                                            Curves.elasticInOut,
+                                        reverseAnimationCurve: Curves.easeOut,
+                                      );
+                                    }
+                                  },
+                                  child: const Text(
+                                    'upload to database',
+                                  ),
+                                )
+                              : const CircularProgressIndicator(),
+                          const SizedBox(
                             width: 8,
                           ),
-                  ],
-                )
-              : ElevatedButton(
-                  onPressed: () {
-                    textData = false;
-                    resetValues();
-                    MessageSelector();
-                  },
-                  child: const Text(
-                    'Select Message',
-                  ),
-                ),
-          (songname.text != '' && hideprogress == false)
-              ? buldProgress()
-              : SizedBox.shrink()
+                          hideprogress
+                              ? ElevatedButton(
+                                  // style: styleFrom(color: Colors.red),
+                                  onPressed: () {
+                                    resetValues();
+                                    setState(() {});
+                                  },
+                                  child: const Text(
+                                    'Clear',
+                                  ),
+                                )
+                              : const SizedBox(
+                                  width: 8,
+                                ),
+                        ],
+                      )
+                    : ElevatedButton(
+                        onPressed: () {
+                          textData = false;
+                          resetValues();
+                          MessageSelector();
+                        },
+                        child: const Text(
+                          'Select Message',
+                        ),
+                      ),
+                (songname.text != '' && hideprogress == false)
+                    ? buldProgress()
+                    : SizedBox.shrink()
+              ],
+            ),
+          )
         ],
       ),
     );

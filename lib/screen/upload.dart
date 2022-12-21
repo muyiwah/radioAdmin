@@ -291,62 +291,7 @@ class _UploadState extends State<Upload> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Material(
-        child: Center(
-          child: Uploadfunctions(),
-          // child: Column(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: <Widget>[
-          //     if (pickedFile != null)
-          //       Expanded(
-          //         child: Container(
-          //           child: Image.file(
-          //             File(pickedFile!.path!),
-          //             width: double.infinity,
-          //             fit: BoxFit.cover,
-          //           ),
-          //         ),
-          //       ),
-          //     if (waiting == true)
-          //       const Center(child: CircularProgressIndicator()),
-          //     if (songpath != null)
-          //       Text('$songpath', style: const TextStyle(color: Colors.black)),
-          //     // Text('$urlDownload', style: const TextStyle(color: Colors.black)),
-          //     // Text('$urlDownload2', style: const TextStyle(color: Colors.black)),
-          //     // Text('$songpath',
-          //     //     style: const TextStyle(
-          //     //         color: Colors.black, fontWeight: FontWeight.bold)),
-          //     // Padding(
-          //     //   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          //     //   child: TextField(
-          //     //     style: TextStyle(fontWeight: FontWeight.bold),
-          //     //     controller: songname,
-          //     //     decoration: const InputDecoration(
-          //     //       hintText: "Enter song name",
-          //     //     ),
-          //     //   ),
-          //     // ),
-          //     // Row(
-          //     //   mainAxisAlignment: MainAxisAlignment.center,
-          //     //   children: [
-          //     //     ElevatedButton(
-          //     //       onPressed: selectimage,
-          //     //       child: const Text("Select Image"),
-          //     //     ),
-          //     //     const SizedBox(
-          //     //       width: 10,
-          //     //     ),
-          //     //   ],
-          //     // ),
-
-          //     ElevatedButton(
-          //       // onPressed: () => finalupload(context),
-          //       onPressed: () => uploadFiles(context),
-          //       child: const Text("Upload"),
-          //     ),
-          //     if (songname.text != '' && hideprogress == false) buldProgress(),
-          //   ],
-          // ),
-        ),
+        child: Uploadfunctions(),
       ),
     );
   }

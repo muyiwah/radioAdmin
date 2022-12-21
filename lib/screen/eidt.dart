@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:trccadmin/screen/subscirbers.dart';
 import 'package:trccadmin/widget/qr.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class Edit extends StatefulWidget {
   @override
@@ -13,6 +14,32 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
+  var subscription;
+  bool internetAvailable = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      print(result);
+      if (result == ConnectivityResult.wifi ||
+          result == ConnectivityResult.mobile) {
+        setState(() {
+          internetAvailable = true;
+        });
+      } else {
+        setState(() {
+          internetAvailable = false;
+        });
+      }
+      // Got a new connectivity status!
+    });
+    // print(subscription);
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -89,7 +116,7 @@ class _EditState extends State<Edit> {
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text("Loading");
+              return Center(child: const Text("Loading"));
             }
 
             return Expanded(
@@ -113,33 +140,65 @@ class _EditState extends State<Edit> {
                         contentPadding: const EdgeInsets.all(0),
                         trailing:
                             Row(mainAxisSize: MainAxisSize.min, children: [
-                          IconButton(
-                              padding: const EdgeInsets.all(0),
-                              onPressed: () {
+                          GestureDetector(
+                              onTap: () {
                                 playSong(data['song_url']);
                               },
-                              icon: Icon(
+                              child: Icon(
                                   isPlaying && data['song_url'] == playUrl
                                       ? Icons.pause
                                       : Icons.play_arrow_outlined)),
-                          IconButton(
-                              padding: const EdgeInsets.all(8),
-                              onPressed: () => deleteMessage(
+                          GestureDetector(
+                              onTap: () {
+                                if (internetAvailable == true) {
+                                  deleteMessage(
                                     documentID,
                                     data['song_name'],
-                                  ),
-                              icon: const Icon(Icons.delete)),
-                          // TextButton(
-                          //     onPressed: () => Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (BuildContext context) => Qr(
-                          //                 documentID: documentID,
-                          //                 title: data['song_name']))),
-                          //     child: Text(
-                          //       'QR',
-                          //       style: TextStyle(color: Colors.black),
-                          //     ))
+                                  );
+                                } else {
+                                  Get.snackbar(
+                                    duration:
+                                        const Duration(milliseconds: 8000),
+                                    'Alert',
+                                    'seems as if you are not connected to the internet, check your internet connection and try again',
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    forwardAnimationCurve: Curves.elasticInOut,
+                                    reverseAnimationCurve: Curves.easeOut,
+                                  );
+                                }
+                              },
+                              child: const Icon(Icons.delete)),
+                          // Container(
+                          //   margin: EdgeInsets.symmetric(horizontal: 5),
+                          //   padding: EdgeInsets.all(2),
+                          //   decoration: BoxDecoration(
+                          //       color: Colors.blue,
+                          //       borderRadius: BorderRadius.circular(10)),
+                          //   child: const Text(
+                          //     'QR',
+                          //     style: TextStyle(
+                          //         color: Colors.black,
+                          //         fontWeight: FontWeight.bold,
+                          //         fontSize: 18),
+                          //   ),
+                          // ),
+                          GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) => Qr(
+                                          documentID: documentID,
+                                          title: data['song_name']))),
+                              child: Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text(
+                                  'QR',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              )),
                           isPaid
                               ? InkWell(
                                   onTap: () {
@@ -165,33 +224,37 @@ class _EditState extends State<Edit> {
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.lightBlue.withOpacity(.3),
                                     ),
-                                    child: Column(
+                                    child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       // ignore: prefer_const_literals_to_create_immutables
                                       children: [
                                         const Text(
-                                          'Add',
+                                          'Email',
                                           style: TextStyle(color: Colors.black),
                                         ),
                                         const Text(
-                                          'Email',
-                                          style: TextStyle(color: Colors.black),
+                                          '+',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
                                         )
                                       ],
                                     ),
                                   ),
                                 )
                               : Container(
-                                  padding: const EdgeInsets.all(4),
+                                  padding: const EdgeInsets.all(3),
                                   margin: const EdgeInsets.only(right: 6),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.green.withOpacity(0.3),
                                   ),
                                   child: const Text(
-                                    'Free',
-                                    style: TextStyle(color: Colors.black),
+                                    'Msg Free',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 11),
                                   ),
                                 ),
                         ]),
@@ -219,7 +282,9 @@ class _EditState extends State<Edit> {
                         title: Expanded(
                           child: Text(
                             data['song_name'],
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 15),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         subtitle: Flexible(

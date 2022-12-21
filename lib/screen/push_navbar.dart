@@ -4,6 +4,7 @@ import 'package:trccadmin/screen/statistics.dart';
 import 'package:trccadmin/screen/subscirbers.dart';
 import 'package:trccadmin/screen/upload.dart';
 
+import '../widget/upload_functions.dart';
 import 'eidt.dart';
 
 class PushNavbar extends StatefulWidget {
@@ -17,7 +18,7 @@ class _PushNavbarState extends State<PushNavbar> {
   final _screens = [
     // Subscribers(),
     Notificat(),
-    Upload(),
+    Uploadfunctions(),
     Edit(),
     Statistics()
   ];

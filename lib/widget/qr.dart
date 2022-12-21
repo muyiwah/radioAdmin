@@ -28,14 +28,17 @@ class Qr extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(title.toString()),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(title.toString()),
+            ),
             Container(
               width: MediaQuery.of(context).size.width * .7,
               child: QrImage(
                 data: documentID,
                 version: QrVersions.auto,
                 backgroundColor: Colors.white,
-                size: 320,
+                size: 230,
                 gapless: false,
               ),
             ),

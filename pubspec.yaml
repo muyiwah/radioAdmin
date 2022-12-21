@@ -51,7 +51,8 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   on_audio_query: ^2.6.1
   get:
-
+  connectivity_plus: ^3.0.2
+  
 flutter_icons:
   android: "launcher_icon"
   ios: true
