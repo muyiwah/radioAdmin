@@ -71,7 +71,7 @@ class _NotificatState extends State<Notificat> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
-                'lib/icon/trcc.jpeg',
+                'lib/icon/conImage.jpeg',
                 width: double.maxFinite,
                 fit: BoxFit.cover,
               ),

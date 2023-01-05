@@ -1,11 +1,12 @@
 import 'dart:io';
-
+// import 'dart.html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:trccadmin/screen/upload.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -19,39 +20,35 @@ class Uploadfunctions extends StatefulWidget {
 
 class _UploadfunctionsState extends State<Uploadfunctions> {
   var subscription;
-  bool internetAvailable = false;
+  var lognow = Logger();
+  static bool internetAvailable = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      print(result);
-      if (result == ConnectivityResult.wifi ||
-          result == ConnectivityResult.mobile) {
-        setState(() {
-          internetAvailable = true;
-        });
-      } else {
-        setState(() {
-          internetAvailable = false;
-        });
-      }
-      // Got a new connectivity status!
-    });
+    checkInternet();
     // print(subscription);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    subscription.cancel();
+  void checkInternet() {
+    subscription = Connectivity().onConnectivityChanged.listen(
+      (ConnectivityResult result) {
+        print(result);
+        if (result == ConnectivityResult.wifi ||
+            result == ConnectivityResult.mobile) {
+          setState(() {
+            internetAvailable = true;
+          });
+        } else {
+          setState(() {
+            internetAvailable = false;
+          });
+        }
+        // Got a new connectivity status!
+      },
+    );
   }
-
   // Future checkConnect(context) async {
   //   _onTapButton(context, 'not ');
   //   var connectivityResult = await (Connectivity().checkConnectivity());
@@ -94,35 +91,35 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
   String paymentOPtion = "";
   String paymentAmount = "0";
   String valueText = "";
-  bool paid = true;
+  bool paid = false;
   int level = 0;
   List email = ['admin@gmail.com'];
   bool textData = false;
 //output: 2021-10-17 20:04:17.118089
 
   String datetime1 = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  DateTime datetime2 = DateTime.now();
   var stat;
-  Future selectimage() async {
-    final image = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.image,
-    );
-    if (image != null) {
-      setState(() {
-        pickedFile = image.files.first;
-        PaidSelector();
-      });
-    } else {
-      Get.back();
-    }
-  }
+  // Future selectimage() async {
+  //   final image = await FilePicker.platform.pickFiles(
+  //     allowMultiple: false,
+  //     type: FileType.image,
+  //   );
+  //   if (image != null) {
+  //     setState(() {
+  //       pickedFile = image.files.first;
+  //       PaidSelector();
+  //     });
+  //   } else {
+  //     Get.back();
+  //   }
+  // }
 
   // void defaulImage() {
   //   pickedFile = Path('lib/icon/trcc.jpg');
   // }
 
   void selectsong() async {
-    print("im here now");
     setState(() {
       waiting = true;
     });
@@ -149,6 +146,36 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
     PreacherName();
   }
 
+  void selectsong2() async {
+    print("im here now");
+    setState(() {
+      waiting = true;
+    });
+    final song = await FilePicker.platform
+        .pickFiles(type: FileType.audio, allowMultiple: false);
+
+    if (song != null && song.files.isNotEmpty) {
+      final fileBytes = song.files.first.bytes;
+      final fileName = song.files.first.name;
+      final songName = song.names.first;
+      songpath = songName;
+      songname.text = songpath.toString();
+      print(fileBytes);
+      print(song.names);
+      setState(() {
+        songnameforfirebase = songname.text.toLowerCase();
+        pickedSong = song.files.first;
+        waiting = false;
+        // displayTextInputDialog(context, 'Enter name of Preacher', true);
+        PreacherName();
+      });
+      // upload file
+      // await FirebaseStorage.instance
+      //     .ref('uploads/$fileName')
+      //     .putData(fileBytes);
+    }
+  }
+
   bool waiting = false;
   Future uploadFiles(context) async {
     if (songname.text == '' || songpath == null) {
@@ -166,26 +193,26 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
         ),
       );
     } else {
-      final path = 'hhccFiles/${pickedFile!.name}';
-      final path2 = 'hhccFiles/${pickedSong!.name}';
-      final file = File(pickedFile!.path!);
+      // final path = 'hhccFiles/${pickedFile!.name}';
+      final path2 = 'leadershipconf2023/${pickedSong!.name}';
+      // final file = File(pickedFile!.path!);
       final file2 = File(pickedSong!.path!);
       songnameforfirebase = songname.text;
       preacherforfirebase = preacherValue;
-      final ref = FirebaseStorage.instance.ref().child(path);
+      // final ref = FirebaseStorage.instance.ref().child(path);
       final ref2 = FirebaseStorage.instance.ref().child(path2);
       setState(() {
         songnameforfirebase = songname.text;
         preacherforfirebase = preacherValue;
-        uploadTask = ref.putFile(file);
+        // uploadTask = ref.putFile(file);
         uploadTask2 = ref2.putFile(file2);
       });
-      final snapshot = await uploadTask!.whenComplete(() {});
+      // final snapshot = await uploadTask!.whenComplete(() {});
       final snapshot2 = await uploadTask2!.whenComplete(() {});
-      urlDownload = await snapshot.ref.getDownloadURL();
+      // urlDownload = await snapshot.ref.getDownloadURL();
       urlDownload2 = await snapshot2.ref.getDownloadURL();
       await finalupload(context);
-      print(urlDownload);
+      // print(urlDownload);
       setState(() {
         print(urlDownload);
         // uploadTask2 = null;
@@ -246,26 +273,31 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
     return caseSearchList2;
   }
 
+  // final DateTime date2 = DateTime(2021, 8, 10);
+  // late final timestamp2 = date2.millisecondsSinceEpoch;
   Future finalupload(context) async {
     hideprogress = false;
+    lognow.e(datetime2);
+    lognow.d(datetime2.microsecondsSinceEpoch);
     // if (songname.text != '') {
     var data = {
       "song_name": songname.text,
-      "image_url": urlDownload.toString(),
+      // "image_url": urlDownload.toString(),
       "song_url": urlDownload2.toString(),
       "search": setSearchParam(songnameforfirebase),
       "search2": setSearchParam2(preacherforfirebase),
       // "search": caseSearchList,
-      'timestamp': Timestamp.now(),
+      'timestamp': datetime2.millisecondsSinceEpoch,
       'price': paymentAmount,
       'date': datetime1,
       'paid': paid,
+      'preacher': preacherValue,
       'listenCounter': 0,
       'email': email,
     };
 
     FirebaseFirestore.instance
-        .collection("hhccmessages")
+        .collection("mivconfmessages")
         .add(data)
         .whenComplete(() => {
               setState(() {
@@ -327,24 +359,28 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                 const SizedBox(
                   height: 10,
                 ),
+
                 Row(
                   children: [
-                    if (pickedFile != null)
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        height: 100,
-                        width: 100,
-                        child: Container(
-                          child: Image.file(
-                            File(pickedFile!.path!),
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    Padding(
-                      //
-                      padding: EdgeInsets.all(10),
+                    // if (pickedFile != null)
+                    //   Container(
+                    //     padding: EdgeInsets.only(left: 10),
+                    //     height: 100,
+                    //     width: 100,
+                    //     child: Container(
+                    //       child: Image.file(
+                    //         File(pickedFile!.path!),
+                    //         width: double.infinity,
+                    //         fit: BoxFit.cover,
+                    //       ),
+                    //     ),
+                    //   ),
+                    Container(
+                      margin: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(10)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,8 +395,12 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                               maxLines: 2,
                             ),
                           if (preacherValue.isNotEmpty)
-                            Text('Preacher:  ' + preacherValue,
-                                style: const TextStyle(color: Colors.black)),
+                            Text(
+                              'Preacher:  ' + preacherValue,
+                              style: const TextStyle(color: Colors.black),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           if (preacherValue.isNotEmpty)
                             Text('Date:  ' + datetime1,
                                 style: const TextStyle(color: Colors.black)),
@@ -368,7 +408,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                             Text('Message Type:  ' + paymentOPtion,
                                 style: const TextStyle(color: Colors.black)),
                           if (paymentAmount != "0")
-                            Text('Amount:  ' + 'N' + paymentAmount,
+                            Text('Amount:  N$paymentAmount',
                                 style: const TextStyle(color: Colors.black)),
                         ],
                       ),
@@ -376,9 +416,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                   ],
                 ),
                 // const Spacer(),
-                (songpath != null &&
-                        preacherValue.isNotEmpty &&
-                        pickedFile != null)
+                (songpath != null && preacherValue.isNotEmpty)
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -437,7 +475,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                       ),
                 (songname.text != '' && hideprogress == false)
                     ? buldProgress()
-                    : SizedBox.shrink()
+                    : const SizedBox.shrink()
               ],
             ),
           )
@@ -462,6 +500,9 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
         setState(() {
           print(newDate);
           datetime1 = newDate.toString().split(" ")[0];
+          datetime2 = newDate;
+          lognow.e(datetime2);
+          lognow.d(datetime2.microsecondsSinceEpoch);
           print(datetime1);
           Get.back();
         });
@@ -478,39 +519,39 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
     // ));
   }
 
-  void BannerSelector() {
-    Get.dialog(
-      AlertDialog(
-        actionsAlignment: MainAxisAlignment.center,
-        content: Text('select a thumnail/image'),
-        actions: <Widget>[
-          ElevatedButton(
-            child: const Text('CANCEL'),
-            onPressed: () {
-              level = 0;
-              setState(() {
-                Navigator.pop(context);
-              });
-            },
-          ),
-          ElevatedButton(
-            child: const Text('Ok'),
-            onPressed: () {
-              Get.back();
-              selectimage();
-            },
-          ),
-          // ElevatedButton(
-          //   child: const Text('Skip'),
-          //   onPressed: () {
-          //     Get.back();
-          //     PaidSelector();
-          //   },
-          // ),
-        ],
-      ),
-    );
-  }
+  // void BannerSelector() {
+  //   Get.dialog(
+  //     AlertDialog(
+  //       actionsAlignment: MainAxisAlignment.center,
+  //       content: Text('select a thumnail/image'),
+  //       actions: <Widget>[
+  //         ElevatedButton(
+  //           child: const Text('CANCEL'),
+  //           onPressed: () {
+  //             level = 0;
+  //             setState(() {
+  //               Navigator.pop(context);
+  //             });
+  //           },
+  //         ),
+  //         ElevatedButton(
+  //           child: const Text('Ok'),
+  //           onPressed: () {
+  //             Get.back();
+  //             selectimage();
+  //           },
+  //         ),
+  //         // ElevatedButton(
+  //         //   child: const Text('Skip'),
+  //         //   onPressed: () {
+  //         //     Get.back();
+  //         //     PaidSelector();
+  //         //   },
+  //         // ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void MessageSelector() {
     Get.dialog(
@@ -531,7 +572,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
             child: const Text('Ok'),
             onPressed: () {
               Get.back();
-              selectsong();
+              selectsong2();
             },
           ),
         ],
@@ -553,11 +594,13 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
               groupValue: false,
               onChanged: (value) {
                 setState(() {
-                  paymentOPtion = "paid";
-                  debugPrint(value.toString());
-                  print(value);
-                  paid = !value!;
+                  paymentOPtion = "free";
+                  paymentAmount = '0';
+// Get.snackbar()
+                  paid = value!;
                 });
+                Get.back();
+                dateSelector();
               },
             ),
             RadioListTile(
@@ -566,11 +609,13 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
               groupValue: true,
               onChanged: (value) {
                 setState(() {
-                  paid = !value!;
+                  paid = value!;
 
-                  paymentOPtion = 'free';
+                  paymentOPtion = 'paid';
                   print(value);
                 });
+                Get.back();
+                EnterAmount();
               },
             ),
           ]),
@@ -586,15 +631,20 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
             ElevatedButton(
               child: const Text('Ok'),
               onPressed: () {
-                Get.back();
-                EnterAmount();
-                setState(() {});
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Skip'),
-              onPressed: () {
-                Get.back();
+                if (paid == true) {
+                  paymentOPtion = 'paid';
+                } else {
+                  paymentOPtion = 'free';
+                }
+                if (paymentOPtion == 'paid') {
+                  Get.back();
+                  EnterAmount();
+                  setState(() {});
+                } else if (paymentOPtion == 'free') {
+                  Get.back();
+                  dateSelector();
+                  setState(() {});
+                }
               },
             ),
           ],
@@ -632,6 +682,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
           ElevatedButton(
             child: const Text('CANCEL'),
             onPressed: () {
+              resetValues();
               setState(() {});
               Get.back();
             },
@@ -645,18 +696,11 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                 paymentAmount = paymentAmount.split(',')[0];
               }
               setState(() {});
-              amount.text = "";
-              Get.back();
-              dateSelector();
-            },
-          ),
-          ElevatedButton(
-            child: const Text('Skip'),
-            onPressed: () {
-              setState(() {});
-
-              Get.back();
-              dateSelector();
+              if (paymentAmount != '0' && paymentOPtion != 'free') {
+                amount.text = "";
+                Get.back();
+                dateSelector();
+              }
             },
           ),
         ],
@@ -708,8 +752,8 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
               if (preacherValue.isNotEmpty) {
                 preach.text = "";
                 Get.back();
-                print('BannerSelector');
-                BannerSelector();
+                print('PaidSelector');
+                PaidSelector();
               }
             },
           )

@@ -43,7 +43,7 @@ class _UploadState extends State<Upload> {
   List docsId = [];
   Future fetchData2() async {
     final db = FirebaseFirestore.instance;
-    await db.collection('hhccmessages').doc().get().then((value) {
+    await db.collection('mivconfmessages').doc().get().then((value) {
       docsId.add(value.get('song_name'));
     });
     // .collection('zionmessages')

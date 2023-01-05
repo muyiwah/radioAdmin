@@ -39,17 +39,17 @@ class _SubscribersState extends State<Subscribers> {
   }
 
   // final Stream<DocumentSnapshot> _tableStream = FirebaseFirestore.instance
-  //     .collection('hhccmessages')
+  //     .collection('mivconfmessages')
   //     .doc()
   //     // .orderBy('timestamp', descending: true) /////'s5y2m01JvgL6kxg7UlPh'
   //     .snapshots();
   // final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
-  //     .collection('hhccmessages')
+  //     .collection('mivconfmessages')
   //     .doc(document)
   //     .snapshots() as Stream<QuerySnapshot<Object?>>;
 
   Future addMail(emailEntry) => FirebaseFirestore.instance
-          .collection('hhccmessages')
+          .collection('mivconfmessages')
           .doc(fromEdit[0].toString())
           .update({
         'email': FieldValue.arrayUnion([emailEntry])
@@ -57,7 +57,7 @@ class _SubscribersState extends State<Subscribers> {
                 emailEntry = "";
               }));
   Future deleteMail(toDelete) => FirebaseFirestore.instance
-          .collection('hhccmessages')
+          .collection('mivconfmessages')
           .doc(fromEdit[0].toString())
           .update({
         'email': FieldValue.arrayRemove([toDelete.toString()])
@@ -161,7 +161,7 @@ class _SubscribersState extends State<Subscribers> {
           Expanded(
             child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('hhccmessages')
+                    .collection('mivconfmessages')
                     .doc(fromEdit[0].toString())
                     // .orderBy('timestamp', descending: true)/////'s5y2m01JvgL6kxg7UlPh'
                     .snapshots(),
