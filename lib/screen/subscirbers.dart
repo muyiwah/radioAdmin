@@ -24,6 +24,7 @@ class _SubscribersState extends State<Subscribers> {
   int totalPrice = 0;
   var totalPrice2 = 0;
   String price = '';
+  List multipleEntry = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -53,6 +54,15 @@ class _SubscribersState extends State<Subscribers> {
           .doc(fromEdit[0].toString())
           .update({
         'email': FieldValue.arrayUnion([emailEntry])
+      }).then((value) => setState(() {
+                emailEntry = "";
+              }));
+
+  Future addMultipleMail(emailEntry) => FirebaseFirestore.instance
+          .collection('mivconfmessages')
+          .doc(fromEdit[0].toString())
+          .update({
+        'email': FieldValue.arrayUnion([...emailEntry])
       }).then((value) => setState(() {
                 emailEntry = "";
               }));
@@ -107,6 +117,59 @@ class _SubscribersState extends State<Subscribers> {
                     Get.back();
                     print('BannerSelector');
                     addMail(emailEntry);
+                  }
+                },
+              )
+            ],
+          );
+        }));
+  }
+
+  void enterMultipleSubscriber(context) {
+    print('PreacherName');
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.center,
+            content: TextField(
+              controller: subscribe,
+              maxLength: 50,
+              onChanged: (value) {
+                multipleEntry = value.split(' ');
+              },
+              keyboardType: TextInputType.text,
+              maxLines: 2,
+              decoration: const InputDecoration(
+                // errorText: messageError,
+                border: OutlineInputBorder(),
+                hintText: 'Multiple Email',
+                labelText: 'seperate email by space',
+                fillColor: Colors.white,
+                filled: true,
+                labelStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  if (multipleEntry.isNotEmpty) {
+                    subscribe.text = "";
+                    Get.back();
+                    print('BannerSelector');
+                    addMultipleMail(multipleEntry);
                   }
                 },
               )
@@ -203,8 +266,13 @@ class _SubscribersState extends State<Subscribers> {
                           ),
                           trailing: IconButton(
                               onPressed: (() {
-                                if (data['email'][index].toString() !=
-                                    "admin@gmail.com") {
+                                if (data['email'][index]
+                                    .toString()
+                                    .contains("admin@gmail.com")) {
+                                  Get.snackbar(
+                                      'Alert', 'You cannot delete the admin',
+                                      backgroundColor: Colors.white);
+                                } else {
                                   del(
                                     data['email'][index].toString(),
                                   );
@@ -238,6 +306,15 @@ class _SubscribersState extends State<Subscribers> {
             },
             child: const Text(
               'Add Subscriber',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              enterMultipleSubscriber(context);
+              // enterSubscriber;
+            },
+            child: const Text(
+              'Add Multiple Subscribers',
             ),
           ),
         ],

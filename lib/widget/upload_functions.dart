@@ -597,7 +597,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
                   paymentOPtion = "free";
                   paymentAmount = '0';
 // Get.snackbar()
-                  paid = value!;
+                  paid = false;
                 });
                 Get.back();
                 dateSelector();
@@ -609,7 +609,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
               groupValue: true,
               onChanged: (value) {
                 setState(() {
-                  paid = value!;
+                  paid = true;
 
                   paymentOPtion = 'paid';
                   print(value);

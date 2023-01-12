@@ -128,7 +128,10 @@ class _EditState extends State<Edit> {
                   // Timestamp t = data['timestamp'];
                   // DateTime d = t.toDate();
                   // String y = DateFormat("yyyy-MM-dd").format(d);
-                  bool isPaid = data['paid'];
+                  final price = data['price'];
+                  bool isPaid = false;
+                  // List exceptions = data['email'];
+                  if (price == '0') isPaid = true;
                   return Column(
                     children: [
                       Divider(
