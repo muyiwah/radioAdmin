@@ -15,12 +15,12 @@ class _EditState extends State<Edit> {
   bool isPlaying = false;
   static AudioPlayer player = AudioPlayer();
   final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
-      .collection('mivconfmessages')
+      .collection('tundegideon')
       .orderBy('timestamp', descending: true)
       .snapshots();
 
   CollectionReference firebaseDelete =
-      FirebaseFirestore.instance.collection('mivconfmessages');
+      FirebaseFirestore.instance.collection('tundegideon');
 
   Future deleteSong(documentID) {
     return firebaseDelete

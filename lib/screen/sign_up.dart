@@ -74,11 +74,11 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         _errorMessage = "password can not be empty";
       });
-    } else if (val != 'soundunit12') {
+    } else if (val != 'wgcadmin') {
       setState(() {
         _errorMessage = "Incorrect password";
       });
-    } else if (val == 'soundunit12') {
+    } else if (val == 'wgcadmin') {
       // Get.snackbar('register', register.toString());
       Navigator.pushReplacement(
         context,

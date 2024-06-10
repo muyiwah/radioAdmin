@@ -93,7 +93,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
   String valueText = "";
   bool paid = false;
   int level = 0;
-  List email = ['admin@gmail.com'];
+  List email = ['admin@gmail.com/08138678918'];
   bool textData = false;
 //output: 2021-10-17 20:04:17.118089
 
@@ -147,7 +147,6 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
   }
 
   void selectsong2() async {
-    print("im here now");
     setState(() {
       waiting = true;
     });
@@ -194,7 +193,7 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
       );
     } else {
       // final path = 'hhccFiles/${pickedFile!.name}';
-      final path2 = 'leadershipconf2023/${pickedSong!.name}';
+      final path2 = 'tundegideon/${pickedSong!.name}';
       // final file = File(pickedFile!.path!);
       final file2 = File(pickedSong!.path!);
       songnameforfirebase = songname.text;
@@ -290,14 +289,14 @@ class _UploadfunctionsState extends State<Uploadfunctions> {
       'timestamp': datetime2.millisecondsSinceEpoch,
       'price': paymentAmount,
       'date': datetime1,
-      'paid': paid,
+      'paid': false,
       'preacher': preacherValue,
       'listenCounter': 0,
       'email': email,
     };
 
     FirebaseFirestore.instance
-        .collection("mivconfmessages")
+        .collection("tundegideon")
         .add(data)
         .whenComplete(() => {
               setState(() {

@@ -17,7 +17,7 @@ final functions = FirebaseFunctions.instance;
 
 class _NotificatState extends State<Notificat> {
   final String _content =
-      'hhcc Radio is live, connect using hhccradio.web.app or download hhccradio app from playstore';
+      'IMLC2023 is live, connect by downloading IMLC2023 app from playstore';
 
   void _shareContent() {
     Share.share(_content);
@@ -27,8 +27,8 @@ class _NotificatState extends State<Notificat> {
   Future<void> Notification() async {
     // await FirebaseMessaging.instance.subscribeToTopic("AllPushNotifications2");
 
-    final results = await FirebaseFunctions.instance
-        .httpsCallable('hhccradio')
+    await FirebaseFunctions.instance
+        .httpsCallable('tundegideon')
         .call(<String, dynamic>{
       'title': _minLength.text,
       'body': _minLengthMessage.text,
@@ -78,138 +78,139 @@ class _NotificatState extends State<Notificat> {
             ),
           ),
           SliverToBoxAdapter(
-              // child: Column(
-              //   children: [
-              //     Container(
-              //         child: Text(
-              //       'Push Notifications are used to notify users of any programe, The user gets the notification immediately if online or gets the notification immediately it gets online if offline. Use discreetly!',
-              //     )),
-              //     SizedBox(
-              //       height: 9,
-              //     ),
-              //     Flexible(
-              //       child: TextField(
-              //         controller: _minLength,
-              //         maxLength: 25,
-              //         decoration: InputDecoration(
-              //           border: OutlineInputBorder(),
-              //           hintText: 'Notification Title',
-              //           labelText: 'Title',
-              //           errorText: lengthError,
-              //           fillColor: Colors.white,
-              //           filled: true,
-              //           labelStyle: TextStyle(
-              //             fontSize: 18,
-              //             color: Colors.black,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       height: 9,
-              //     ),
-              //     TextField(
-              //       controller: _minLengthMessage,
-              //       maxLength: 150,
-              //       maxLines: 4,
-              //       decoration: InputDecoration(
-              //         errorText: messageError,
-              //         border: OutlineInputBorder(),
-              //         hintText: 'Notification Body',
-              //         labelText: 'Message',
-              //         fillColor: Colors.white,
-              //         filled: true,
-              //         labelStyle: TextStyle(
-              //           fontSize: 18,
-              //           color: Colors.black,
-              //         ),
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       height: 9,
-              //     ),
-              //     TextField(
-              //       controller: passwordText,
-              //       obscureText: secureText,
-              //       decoration: InputDecoration(
-              //         suffixIcon: IconButton(
-              //           onPressed: () {
-              //             setState(() {
-              //               secureText = !secureText;
-              //             });
-              //           },
-              //           icon: Icon(
-              //               secureText ? Icons.remove_red_eye : Icons.security),
-              //         ),
-              //         errorText: passwordError,
-              //         border: OutlineInputBorder(),
-              //         labelText: 'Password',
-              //         hintText: 'password',
-              //         fillColor: Colors.white,
-              //         filled: true,
-              //         labelStyle: TextStyle(
-              //           fontSize: 18,
-              //           color: Colors.black,
-              //         ),
-              //       ),
-              //     ),
-              //     ElevatedButton(
-              //       onPressed: () {
-              //         setState(() {
-              //           if (_minLength.text.length < 4) {
-              //             lengthError = "Enter at least 4 char";
-              //             print(lengthError);
-              //           } else {
-              //             lengthError = null;
-              //             print(_minLength.text);
-              //           }
-              //           if (_minLengthMessage.text.length < 5) {
-              //             messageError = "Enter at least 5 char";
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Container(
+                      child: Text(
+                    'Push Notifications are used to notify users of any programe, The user gets the notification immediately if online or gets the notification immediately it gets online if offline. Use discreetly!',
+                  )),
+                  SizedBox(
+                    height: 9,
+                  ),
+                  TextField(
+                    controller: _minLength,
+                    maxLength: 25,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Notification Title',
+                      labelText: 'Title',
+                      errorText: lengthError,
+                      fillColor: Colors.white,
+                      filled: true,
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 9,
+                  ),
+                  TextField(
+                    controller: _minLengthMessage,
+                    maxLength: 150,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      errorText: messageError,
+                      border: OutlineInputBorder(),
+                      hintText: 'Notification Body',
+                      labelText: 'Message',
+                      fillColor: Colors.white,
+                      filled: true,
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 9,
+                  ),
+                  TextField(
+                    controller: passwordText,
+                    obscureText: secureText,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            secureText = !secureText;
+                          });
+                        },
+                        icon: Icon(
+                            secureText ? Icons.remove_red_eye : Icons.security),
+                      ),
+                      errorText: passwordError,
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                      hintText: 'password',
+                      fillColor: Colors.white,
+                      filled: true,
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        if (_minLength.text.length < 4) {
+                          lengthError = "Enter at least 4 char";
+                          print(lengthError);
+                        } else {
+                          lengthError = null;
+                          print(_minLength.text);
+                        }
+                        if (_minLengthMessage.text.length < 5) {
+                          messageError = "Enter at least 5 char";
 
-              //             print(lengthError);
-              //           } else {
-              //             messageError = null;
+                          print(lengthError);
+                        } else {
+                          messageError = null;
 
-              //             print(_minLengthMessage.text);
-              //           }
-              //           if (passwordText.text != 'admin@hhccradio') {
-              //             passwordError = "Wrong Password";
-              //             print(passwordText.text);
-              //           } else {
-              //             passwordError = null;
+                          print(_minLengthMessage.text);
+                        }
+                        if (passwordText.text != 'admin@hhccradio') {
+                          passwordError = "Wrong Password";
+                          print(passwordText.text);
+                        } else {
+                          passwordError = null;
 
-              //             print(_minLengthMessage.text);
-              //           }
-              //           if (_minLength.text.length > 3 &&
-              //               _minLengthMessage.text.length > 5 &&
-              //               passwordText.text == 'admin@hhccradio') {
-              //             _minLength.text = '';
-              //             _minLengthMessage.text = '';
-              //             print('Notification');
-              //             Notification();
-              //             ScaffoldMessenger.of(context).showSnackBar(
-              //               SnackBar(
-              //                 content: const Text('sending...'),
-              //                 action: SnackBarAction(
-              //                   label: 'Dismiss',
-              //                   onPressed: () {
-              //                     // Code to execute.
-              //                   },
-              //                 ),
-              //               ),
-              //             );
-              //           }
-              //         });
-              //       },
-              //       child: Text('Push'),
-              //     ),
-              //     IconButton(
-              //       icon: Icon(Icons.share),
-              //       onPressed: _shareContent,
-              //     ),
-              //   ],
-              // ),
-              )
+                          print(_minLengthMessage.text);
+                        }
+                        if (_minLength.text.length > 3 &&
+                            _minLengthMessage.text.length > 5 &&
+                            passwordText.text == 'soundunit12') {
+                          _minLength.text = '';
+                          _minLengthMessage.text = '';
+                          print('Notification');
+                          Notification();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('sending...'),
+                              action: SnackBarAction(
+                                label: 'Dismiss',
+                                onPressed: () {
+                                  // Code to execute.
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: Text('Push'),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.share),
+                    onPressed: _shareContent,
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

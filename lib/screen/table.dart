@@ -10,11 +10,11 @@ class Table extends StatefulWidget {
 
 class _TableState extends State<Table> {
   final Stream<QuerySnapshot> _tableStream = FirebaseFirestore.instance
-      .collection('mivconfmessages')
+      .collection('tundegideon')
       .orderBy('timestamp', descending: true)
       .snapshots();
   CollectionReference deleteMail =
-      FirebaseFirestore.instance.collection('mivconfmessages');
+      FirebaseFirestore.instance.collection('tundegideon');
 
   // Future deleteMail(mailId){return firebaseDelete.doc(mailId)
   // .delete()

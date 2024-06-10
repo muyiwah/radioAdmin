@@ -50,7 +50,7 @@ class _SubscribersState extends State<Subscribers> {
   //     .snapshots() as Stream<QuerySnapshot<Object?>>;
 
   Future addMail(emailEntry) => FirebaseFirestore.instance
-          .collection('mivconfmessages')
+          .collection('tundegideon')
           .doc(fromEdit[0].toString())
           .update({
         'email': FieldValue.arrayUnion([emailEntry])
@@ -59,7 +59,7 @@ class _SubscribersState extends State<Subscribers> {
               }));
 
   Future addMultipleMail(emailEntry) => FirebaseFirestore.instance
-          .collection('mivconfmessages')
+          .collection('tundegideon')
           .doc(fromEdit[0].toString())
           .update({
         'email': FieldValue.arrayUnion([...emailEntry])
@@ -67,7 +67,7 @@ class _SubscribersState extends State<Subscribers> {
                 emailEntry = "";
               }));
   Future deleteMail(toDelete) => FirebaseFirestore.instance
-          .collection('mivconfmessages')
+          .collection('tundegideon')
           .doc(fromEdit[0].toString())
           .update({
         'email': FieldValue.arrayRemove([toDelete.toString()])
@@ -134,7 +134,6 @@ class _SubscribersState extends State<Subscribers> {
             actionsAlignment: MainAxisAlignment.center,
             content: TextField(
               controller: subscribe,
-              maxLength: 50,
               onChanged: (value) {
                 multipleEntry = value.split(' ');
               },
@@ -224,7 +223,7 @@ class _SubscribersState extends State<Subscribers> {
           Expanded(
             child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('mivconfmessages')
+                    .collection('tundegideon')
                     .doc(fromEdit[0].toString())
                     // .orderBy('timestamp', descending: true)/////'s5y2m01JvgL6kxg7UlPh'
                     .snapshots(),
@@ -255,12 +254,15 @@ class _SubscribersState extends State<Subscribers> {
                       itemCount: receivedMail.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
+                        int indexIncreased = index + 1;
                         return ListTile(
                           enableFeedback: true,
                           tileColor: Colors.grey.shade100,
                           // ignore: prefer_const_constructors
                           title: Text(
-                            data['email'][index].toString(),
+                            indexIncreased.toString() +
+                                ".  " +
+                                data['email'][index].toString(),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

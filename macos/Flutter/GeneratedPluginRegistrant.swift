@@ -14,7 +14,7 @@ import firebase_core
 import firebase_messaging
 import firebase_storage
 import just_audio
-import path_provider_macos
+import path_provider_foundation
 import share_plus_macos
 import sqflite
 import url_launcher_macos

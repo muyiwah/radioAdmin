@@ -83,7 +83,7 @@ class _StatisticsState extends State<Statistics> with WidgetsBindingObserver {
   }
 
   final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
-      .collection('mivconfmessages')
+      .collection('tundegideon')
       .orderBy('timestamp', descending: true)
       .snapshots();
   @override
